@@ -13,9 +13,11 @@
 class KaraokeLine : public Object
 {
 public:
-	explicit KaraokeLine(float max_length_);
+	explicit KaraokeLine(float length_);
 
 	void setLength(float length_);
+
+	void setColor(glm::vec3 color_);
 
 	void draw(const Camera *camera_) override;
 
@@ -29,15 +31,18 @@ private:
 	glm::vec3 m_scale = {1, 1, 1};
 
 	static constexpr float m_thickness = 0.05;
-	const float m_max_length;
 	float m_length = 0;
 	float m_progress = .0;
+
+	glm::vec3 m_color = {1.0f, 1.0f, 1.0f};
 
 	/* ----  ---- **/
 
 	unsigned int m_VAO;
+	unsigned int m_VBO;
 
 	Vertex m_vertex[6];
 	Shader *m_shader;
 	Texture *m_texture;
+
 };

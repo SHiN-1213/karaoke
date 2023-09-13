@@ -4,8 +4,6 @@ layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aTexCoord;
 
 out vec2 vertexPosition; // 入力頂点の位置
-out vec3 ourColor;
-out vec2 TexCoord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -15,6 +13,4 @@ void main()
 {
     vertexPosition = vec2(aPos.x,aPos.y);
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    ourColor = aColor;
-    TexCoord = aTexCoord;
 }

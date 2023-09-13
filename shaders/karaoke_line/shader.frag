@@ -3,12 +3,13 @@
 const float M_PI  = 3.141592653589793;
 
 in vec2 vertexPosition; // 入力頂点の位置
-out vec4 FragColor;   // 出力色 //TODO 大文字化も
+out vec4 FragColor;   // 出力色
 
 uniform vec2 pointA;  // 点Aの位置
 uniform vec2 pointB;  // 点Bの位置
 uniform float lineWidth; // 直線の太さ
 uniform float lineProgress;
+uniform vec3 ourColor;
 
 float dist(vec2 A_, vec2 B_)
 {
@@ -41,15 +42,7 @@ void main()
         }
     }
 
-    float lineMaxLength = dist(pointA,pointB) + lineWidth;
-
-    if((vertexPosition.x + lineMaxLength/2) / lineMaxLength < lineProgress)
-    {
-        FragColor = vec4(1.0, 0.0, 0.0, 1.0); // 例として赤色を使用
-    }
-    else{
-        FragColor = vec4(0.6, 0.6, 0.6, 1.0); // 例として赤色を使用
-    }
+    FragColor = vec4(ourColor, 0.0);
 
 
 }

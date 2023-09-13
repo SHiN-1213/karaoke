@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <chrono>
 
 #include "window/window.hpp"
 #include "input/input.hpp"
@@ -56,12 +57,13 @@ int main()
 	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
 
 	auto oke_obj = new KaraokeLine(2);
-
+	oke_obj->setColor({.6,.6,.6});
 
 	auto *camera = new Camera(glm::vec3(0,0,5),45,800.0f/800.0f,0.1f,100.0f);
 
 	auto *scene = new Scene(camera);
 
+	auto start_time = std::chrono::high_resolution_clock::now();
 
 	scene->addObject(oke_obj);
 	scene->addObject(object);
@@ -69,8 +71,8 @@ int main()
 	while (window->isWindowOpen())
 	{
 		window->clearBuffer();
-
-
+		std::chrono::duration<float> elapsed = std::chrono::high_resolution_clock::now() - start_time;
+		oke_obj->setLength(5 - elapsed.count());
 
 		scene->draw();
 		window->swapBuffer();

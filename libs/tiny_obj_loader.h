@@ -33,12 +33,12 @@ THE SOFTWARE.
 // version 1.4.0 : Modifed ParseTextureNameAndOption API
 // version 1.3.1 : Make ParseTextureNameAndOption API public
 // version 1.3.0 : Separate warning and error message(breaking API of LoadObj)
-// version 1.2.3 : Added color space extension('-colorspace') to tex opts.
+// version 1.2.3 : Added m_color space extension('-colorspace') to tex opts.
 // version 1.2.2 : Parse multiple group names.
 // version 1.2.1 : Added initial support for line('l') primitive(PR #178)
 // version 1.2.0 : Hardened implementation(#175)
 // version 1.1.1 : Support smoothing groups(#162)
-// version 1.1.0 : Support parsing m_vertex color(#144)
+// version 1.1.0 : Support parsing m_vertex m_color(#144)
 // version 1.0.8 : Fix parsing `g` tag just after `usemtl`(#138)
 // version 1.0.7 : Support multiple tex options(#126)
 // version 1.0.6 : Add TINYOBJLOADER_USE_DOUBLE option(#124)
@@ -174,7 +174,7 @@ struct texture_option_t {
   real_t bump_multiplier;  // -bm (for bump maps only, default 1.0)
 
   // extension
-  std::string colorspace;  // Explicitly specify color space of stored texel
+  std::string colorspace;  // Explicitly specify m_color space of stored texel
                            // value. Usually `sRGB` or `linear` (default empty).
 };
 
@@ -511,9 +511,9 @@ struct ObjReaderConfig {
   // "earcut": Use the algorithm based on Ear clipping
   std::string triangulation_method;
 
-  /// Parse m_vertex color.
-  /// If m_vertex color is not present, its filled with default value.
-  /// false = no m_vertex color
+  /// Parse m_vertex m_color.
+  /// If m_vertex m_color is not present, its filled with default value.
+  /// false = no m_vertex m_color
   /// This will increase memory of parsed .obj
   bool vertex_color;
 
