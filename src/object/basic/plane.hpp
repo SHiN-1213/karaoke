@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../../vertex/vertex.hpp"
+#include "../../shader/shader.hpp"
+#include "../../texture/texture.hpp"
+#include "../../camera/camera.hpp"
 #include "../interface/object.hpp"
 #include "../interface/transform.hpp"
 

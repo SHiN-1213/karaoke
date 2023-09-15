@@ -19,6 +19,8 @@ add_library(object STATIC
 
 target_link_libraries(object PUBLIC
         common
+        shader
+        texture
 
         opengl32
         glew32

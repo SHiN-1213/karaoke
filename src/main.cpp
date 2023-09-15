@@ -54,13 +54,13 @@ int main()
 	input->enableRawInput();
 	input->setKeyCallback(keyCallback);
 
-	auto shader = new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.vert",
-	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
-	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
-
-	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
+//	auto shader = new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.vert",
+//	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
+//	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
+//
+//	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
 	auto plane = new Plane(2,2);
-	plane->m_position = {0,0,1};
+	plane->m_position = {0,0,-1};
 	plane->setColor(0,0,0,.2);
 
 	auto oke_obj = new KaraokeLine(2);
@@ -73,7 +73,7 @@ int main()
 	auto start_time = std::chrono::high_resolution_clock::now();
 
 	scene->addObject(oke_obj);
-	scene->addObject(object);
+//	scene->addObject(object);
 	scene->addObject(plane);
 
 	while (window->isWindowOpen())

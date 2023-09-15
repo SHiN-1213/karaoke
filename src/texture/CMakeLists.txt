@@ -6,6 +6,8 @@ add_library(texture STATIC
 )
 
 target_link_libraries(texture PUBLIC
+        common
+
         opengl32
         glew32
         glfw3
