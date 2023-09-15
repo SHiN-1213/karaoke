@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../object/object.hpp"
+#include "../object/interface/object.hpp"
 #include "../camera/camera.hpp"
 
 class Scene

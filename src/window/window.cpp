@@ -29,6 +29,7 @@ void Window::createWindow(int width_, int height_, const char *title_)
 	glViewport(0, 0, width_, height_);
 	glfwSetFramebufferSizeCallback(m_window, resize_callback_);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
 }
 
 [[nodiscard]] bool Window::isWindowOpen() const

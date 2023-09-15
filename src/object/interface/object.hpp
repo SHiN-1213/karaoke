@@ -4,12 +4,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../vertex/vertex.hpp"
-#include "../shader/shader.hpp"
-#include "../texture/texture.hpp"
-#include "../camera/camera.hpp"
+#include "../../vertex/vertex.hpp"
+#include "../../shader/shader.hpp"
+#include "../../texture/texture.hpp"
+#include "../../camera/camera.hpp"
+#include "transform.hpp"
 
-class Object
+class Object : public Transform
 {
 public:
 	virtual void draw(const Camera *camera_) = 0;

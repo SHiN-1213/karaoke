@@ -1,14 +1,20 @@
 cmake_minimum_required(VERSION 3.26)
 
 add_library(object STATIC
-        object.cpp
-        object.hpp
+        interface/object.cpp
+        interface/object.hpp
 
-        tex_planes.cpp
-        tex_planes.hpp
+        interface/transform.cpp
+        interface/transform.hpp
 
-        karaoke_line.cpp
-        karaoke_line.hpp
+        basic/plane.cpp
+        basic/plane.hpp
+
+        basic/tex_planes.cpp
+        basic/tex_planes.hpp
+
+        karaoke/karaoke_line.cpp
+        karaoke/karaoke_line.hpp
 )
 
 target_link_libraries(object PUBLIC

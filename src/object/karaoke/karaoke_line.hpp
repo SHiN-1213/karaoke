@@ -4,11 +4,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../vertex/vertex.hpp"
-#include "../shader/shader.hpp"
-#include "../texture/texture.hpp"
-#include "../camera/camera.hpp"
-#include "object.hpp"
+#include "../../vertex/vertex.hpp"
+#include "../../shader/shader.hpp"
+#include "../../texture/texture.hpp"
+#include "../../camera/camera.hpp"
+#include "../interface/object.hpp"
+#include "../interface/transform.hpp"
 
 class KaraokeLine : public Object
 {
@@ -23,12 +24,12 @@ public:
 
 private:
 private:
-	glm::vec3 m_position = {0, 0, 0};
-
-	float m_angle = 0;
-	glm::vec3 m_axis = {0, 1, 0};
-
-	glm::vec3 m_scale = {1, 1, 1};
+//	glm::vec3 m_position = {0, 0, 0};
+//
+//	float m_angle = 0;
+//	glm::vec3 m_axis = {0, 1, 0};
+//
+//	glm::vec3 m_scale = {1, 1, 1};
 
 	static constexpr float m_thickness = 0.05;
 	float m_length = 0;

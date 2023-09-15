@@ -11,7 +11,11 @@ public:
 	//ロード関数，Jsonの読み込み
 	//デストラクタ
 
-	KaraokeManager();
+	KaraokeManager(std::string json_path_);
+
+	void start();
+	void stop();
+
 private:
 private:
 };

@@ -4,11 +4,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../vertex/vertex.hpp"
-#include "../shader/shader.hpp"
-#include "../texture/texture.hpp"
-#include "../camera/camera.hpp"
-#include "object.hpp"
+#include "../../vertex/vertex.hpp"
+#include "../../shader/shader.hpp"
+#include "../../texture/texture.hpp"
+#include "../../camera/camera.hpp"
+#include "../interface/object.hpp"
 
 class TexPlanes : public Object
 {
