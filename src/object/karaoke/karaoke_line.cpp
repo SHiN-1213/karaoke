@@ -10,8 +10,7 @@ KaraokeLine::KaraokeLine(float length_) :
 		         {glm::vec3(length_, -m_thickness / 2, 0),  glm::vec3(1, 1, 1), glm::vec2(1, 0)},//右下
 		         {glm::vec3(0, -m_thickness / 2, 0), glm::vec3(1, 1, 1), glm::vec2(0, 0)}},//左下
 		m_shader(new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/karaoke/karaoke_line/shader.vert",
-		                    "C:/Users/Kamih/source/repos/opengl_learn/shaders/karaoke/karaoke_line/shader.frag")),
-		m_texture(new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/yellow_ball.jpg"))
+		                    "C:/Users/Kamih/source/repos/opengl_learn/shaders/karaoke/karaoke_line/shader.frag"))
 {
 	glGenVertexArrays(1, &m_VAO);
 
@@ -55,7 +54,6 @@ void KaraokeLine::setColor(glm::vec3 color_)
 void KaraokeLine::draw(const Camera *camera_)
 {
 	m_shader->use();
-	m_texture->use();
 	glBindVertexArray(m_VAO);
 
 	glm::mat4 model = getSrtMatrix();

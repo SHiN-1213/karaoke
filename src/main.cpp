@@ -24,13 +24,15 @@
 #include "object/karaoke/karaoke_line.hpp"
 #include "object/basic/plane.hpp"
 
+#include "karaoke_manager/karaoke_manager.hpp"
+
 void initGlew();
 void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int mods_);
 
 int main()
 {
 	Window *window = Window::getInstance();
-	window->createWindow(800, 800, "Hello window");
+	window->createWindow(1600, 800, "Hello window");
 
 	initGlew();
 
@@ -54,11 +56,11 @@ int main()
 	input->enableRawInput();
 	input->setKeyCallback(keyCallback);
 
-//	auto shader = new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.vert",
-//	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
-//	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
-//
-//	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
+	auto shader = new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.vert",
+	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
+	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
+
+	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
 	auto plane = new Plane(2,2);
 	plane->m_position = {0,0,-1};
 	plane->setColor(0,0,0,.2);
@@ -66,15 +68,21 @@ int main()
 	auto oke_obj = new KaraokeLine(2);
 	oke_obj->setColor({.6,.6,.6});
 
-	auto *camera = new Camera(glm::vec3(0,0,5),45,800.0f/800.0f,0.1f,100.0f);
+	auto *camera = new Camera(glm::vec3(0,0,5),45,1600.0f/800.0f,0.1f,100.0f);
 
 	auto *scene = new Scene(camera);
 
 	auto start_time = std::chrono::high_resolution_clock::now();
 
 	scene->addObject(oke_obj);
-//	scene->addObject(object);
+	scene->addObject(object);
 	scene->addObject(plane);
+
+	KaraokeManager karaoke_manager("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
+	for(const auto &e : karaoke_manager.getObjects())
+	{
+		scene->addObject(e);
+	}
 
 	while (window->isWindowOpen())
 	{

@@ -44,6 +44,5 @@ private:
 
 	Vertex m_vertex[6];
 	Shader *m_shader;
-	Texture *m_texture;
 
 };
