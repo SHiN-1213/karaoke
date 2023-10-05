@@ -28,6 +28,7 @@ void Scene::draw()
 {
 	for (auto obj: m_objects)
 	{
+		if(!obj->isActive()) continue;
 		obj->draw(m_camera);
 	}
 }

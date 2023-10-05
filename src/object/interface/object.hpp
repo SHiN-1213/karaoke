@@ -14,8 +14,11 @@ class Object : public Transform
 {
 public:
 	virtual void draw(const Camera *camera_) = 0;
+	bool isActive();
+	void setActive(bool flag_);
 	virtual ~Object() = default;
 
 private:
 private:
+	bool m_is_active = true;
 };

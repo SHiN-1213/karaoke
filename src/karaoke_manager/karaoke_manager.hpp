@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include "../../libs/json.hpp"
 #include "../object/karaoke/karaoke_line.hpp"
 
@@ -18,10 +19,13 @@ public:
 	KaraokeManager(const char* path_);
 
 	void start();
+	void loop();
 	void stop();
 
-	std::vector<KaraokeLine*> getObjects(){return m_note_objects;};
+	std::vector<std::vector<KaraokeLine*>> getObjects(){return m_note_objects;};
+
 private:
+	int getMjr_();
 private:
 	nlohmann::json m_json_object;
 	/* -- **/
@@ -34,8 +38,15 @@ private:
 	};
 
 	std::vector<std::vector<Notes>> m_notes;//json data
-	std::vector<KaraokeLine*> m_note_objects;//game object
+	std::vector<std::vector<KaraokeLine*>> m_note_objects;//game object
 
 	static constexpr float m_pitch_mlt = 1.0f/8.0f;
-	static constexpr float m_length_mlt = 1/2.0f;
+	static constexpr float m_length_mlt = 2/1.0f;
+
+	//カラオケラインを0 ~ 1に設置，ParentObjectにおいて調整，マネージャー側でParentObjectの制御．
+
+	std::chrono::system_clock::time_point m_start_time;
+	std::chrono::system_clock::time_point m_delta_time;
+
+	double m_chronos_offset = 0;
 };

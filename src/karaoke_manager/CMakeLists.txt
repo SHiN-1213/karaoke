@@ -6,6 +6,8 @@ add_library(karaoke_manager STATIC
 )
 
 target_link_libraries(karaoke_manager PUBLIC
+        object
+
         opengl32
         glew32
         glfw3

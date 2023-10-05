@@ -27,6 +27,7 @@
 #include "karaoke_manager/karaoke_manager.hpp"
 
 void initGlew();
+
 void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int mods_);
 
 int main()
@@ -36,10 +37,10 @@ int main()
 
 	initGlew();
 
-	Vertex vertexxx [] = {
-			{glm::vec3(0.0f, 0.5f, 0.0f),glm::vec3 (1.0f, 1.0f, 1.0f),glm::vec2( 0.5f, 1.0f)},
-			{glm::vec3(0.5f, -0.5f, 0.0f),glm::vec3 (1.0f, 1.0f, 1.0f),glm::vec2( 1.0f, 0.0f)},
-			{glm::vec3(-0.5f, -0.5f, 0.0f),glm::vec3 (1.0f, 1.0f, 1.0f),glm::vec2( 0.0f, 0.0f)}
+	Vertex vertexxx[] = {
+			{glm::vec3(0.0f, 0.5f, 0.0f),   glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 1.0f)},
+			{glm::vec3(0.5f, -0.5f, 0.0f),  glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)},
+			{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)}
 	};
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
@@ -60,36 +61,41 @@ int main()
 	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
 	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
 
-	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
-	auto plane = new Plane(2,2);
-	plane->m_position = {0,0,-1};
-	plane->setColor(0,0,0,.2);
+//	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
+	auto plane = new Plane(2, 2);
+	plane->m_position = {0, 0, -1};
+	plane->setColor(0, 0, 0, .2);
 
 	auto oke_obj = new KaraokeLine(2);
-	oke_obj->setColor({.6,.6,.6});
+	oke_obj->setColor({.6, .6, .6});
 
-	auto *camera = new Camera(glm::vec3(0,0,5),45,1600.0f/800.0f,0.1f,100.0f);
+	auto *camera = new Camera(glm::vec3(0, 0, 5), 45, 1600.0f / 800.0f, 0.1f, 100.0f);
 
 	auto *scene = new Scene(camera);
 
 	auto start_time = std::chrono::high_resolution_clock::now();
 
 	scene->addObject(oke_obj);
-	scene->addObject(object);
+//	scene->addObject(object);
 	scene->addObject(plane);
 
 	KaraokeManager karaoke_manager("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
-	for(const auto &e : karaoke_manager.getObjects())
+	for (const auto &mjr: karaoke_manager.getObjects())
 	{
-		scene->addObject(e);
+		for (const auto &e: mjr)
+		{
+			scene->addObject(e);
+		}
+
 	}
+	karaoke_manager.start();
 
 	while (window->isWindowOpen())
 	{
 		window->clearBuffer();
 		std::chrono::duration<float> elapsed = std::chrono::high_resolution_clock::now() - start_time;
 		oke_obj->setLength(5 - elapsed.count());
-
+		karaoke_manager.loop();
 		scene->draw();
 		window->swapBuffer();
 		input->pollEvents();
