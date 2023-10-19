@@ -16,7 +16,7 @@ public:
 	//ロード関数，Jsonの読み込み
 	//デストラクタ
 
-	KaraokeManager(const char* path_);
+	explicit KaraokeManager(const char* path_);
 
 	void start();
 	void loop();
@@ -26,6 +26,8 @@ public:
 
 private:
 	int getMjr_();
+	std::vector<KaraokeLine*> getLineFromMjr_(int mjr_);
+	void moveLineFromMjr_(int mjr_);
 private:
 	nlohmann::json m_json_object;
 	/* -- **/
@@ -41,7 +43,7 @@ private:
 	std::vector<std::vector<KaraokeLine*>> m_note_objects;//game object
 
 	static constexpr float m_pitch_mlt = 1.0f/8.0f;
-	static constexpr float m_length_mlt = 2/1.0f;
+	static constexpr float m_length_mlt = 3/1.0f;
 
 	//カラオケラインを0 ~ 1に設置，ParentObjectにおいて調整，マネージャー側でParentObjectの制御．
 

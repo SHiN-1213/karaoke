@@ -25,6 +25,7 @@ add_subdirectory(src/object)
 add_subdirectory(src/vertex)
 add_subdirectory(src/camera)
 add_subdirectory(src/karaoke_manager)
+add_subdirectory(src/karaoke)
 
 target_link_libraries(opengl_learn
         common
@@ -37,6 +38,7 @@ target_link_libraries(opengl_learn
         vertex
         camera
         karaoke_manager
+        karaoke
 
         opengl32
         glew32

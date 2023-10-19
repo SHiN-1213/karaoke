@@ -25,6 +25,7 @@
 #include "object/basic/plane.hpp"
 
 #include "karaoke_manager/karaoke_manager.hpp"
+#include "karaoke/karaoke.hpp"
 
 void initGlew();
 
@@ -62,7 +63,7 @@ int main()
 	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
 
 //	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
-	auto plane = new Plane(2, 2);
+	auto plane = new Plane(8, 2);
 	plane->m_position = {0, 0, -1};
 	plane->setColor(0, 0, 0, .2);
 
@@ -79,8 +80,22 @@ int main()
 //	scene->addObject(object);
 	scene->addObject(plane);
 
-	KaraokeManager karaoke_manager("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
-	for (const auto &mjr: karaoke_manager.getObjects())
+//	KaraokeManager karaoke_manager("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
+//	for (const auto &mjr: karaoke_manager.getObjects())
+//	{
+//		for (const auto &e: mjr)
+//		{
+//			scene->addObject(e);
+//		}
+//
+//	}
+//	karaoke_manager.start();
+
+	auto* karaokejson = new KaraokeJson("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
+	auto* karaoke = new Karaoke();
+	karaoke->setJsonObj(*karaokejson);
+	karaoke->instantiate();
+	for (const auto &mjr: karaoke->getObjects())
 	{
 		for (const auto &e: mjr)
 		{
@@ -88,14 +103,15 @@ int main()
 		}
 
 	}
-	karaoke_manager.start();
+	karaoke->start();
+
 
 	while (window->isWindowOpen())
 	{
 		window->clearBuffer();
 		std::chrono::duration<float> elapsed = std::chrono::high_resolution_clock::now() - start_time;
 		oke_obj->setLength(5 - elapsed.count());
-		karaoke_manager.loop();
+//		karaoke_manager.loop();
 		scene->draw();
 		window->swapBuffer();
 		input->pollEvents();
