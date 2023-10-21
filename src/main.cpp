@@ -2,29 +2,20 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <cmath>
+#include <thread>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <chrono>
-
 #include "window/window.hpp"
 #include "input/input.hpp"
-#include "common/file.hpp"
-#include "common/image.hpp"
 #include "shader/shader.hpp"
 #include "texture/texture.hpp"
 #include "vertex/vertex.hpp"
 #include "scene/scene.hpp"
-#include "object/basic/tex_planes.hpp"
 #include "object/karaoke/karaoke_line.hpp"
 #include "object/basic/plane.hpp"
-
-#include "karaoke_manager/karaoke_manager.hpp"
 #include "karaoke/karaoke.hpp"
 
 void initGlew();
@@ -37,12 +28,6 @@ int main()
 	window->createWindow(1600, 800, "Hello window");
 
 	initGlew();
-
-	Vertex vertexxx[] = {
-			{glm::vec3(0.0f, 0.5f, 0.0f),   glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 1.0f)},
-			{glm::vec3(0.5f, -0.5f, 0.0f),  glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)},
-			{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)}
-	};
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
@@ -58,43 +43,19 @@ int main()
 	input->enableRawInput();
 	input->setKeyCallback(keyCallback);
 
-	auto shader = new Shader("C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.vert",
-	                         "C:/Users/Kamih/source/repos/opengl_learn/shaders/default/shader.frag");
-	auto tex_ball = new Texture("C:/Users/Kamih/source/repos/opengl_learn/images/images.jpg");
-
-//	auto object = new TexPlanes(vertexxx, sizeof(vertexxx), shader,tex_ball);
 	auto plane = new Plane(8, 2);
 	plane->m_position = {0, 0, -1};
 	plane->setColor(0, 0, 0, .2);
-
-	auto oke_obj = new KaraokeLine(2);
-	oke_obj->setColor({.6, .6, .6});
 
 	auto *camera = new Camera(glm::vec3(0, 0, 5), 45, 1600.0f / 800.0f, 0.1f, 100.0f);
 
 	auto *scene = new Scene(camera);
 
-	auto start_time = std::chrono::high_resolution_clock::now();
-
-	scene->addObject(oke_obj);
-//	scene->addObject(object);
 	scene->addObject(plane);
 
-//	KaraokeManager karaoke_manager("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
-//	for (const auto &mjr: karaoke_manager.getObjects())
-//	{
-//		for (const auto &e: mjr)
-//		{
-//			scene->addObject(e);
-//		}
-//
-//	}
-//	karaoke_manager.start();
-
-	auto* karaokejson = new KaraokeJson("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
-	auto* karaoke = new Karaoke();
-	karaoke->setJsonObj(*karaokejson);
+	auto* karaoke = new Karaoke("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
 	karaoke->instantiate();
+
 	for (const auto &mjr: karaoke->getObjects())
 	{
 		for (const auto &e: mjr)
@@ -103,18 +64,18 @@ int main()
 		}
 
 	}
-	karaoke->start();
 
+	karaoke->start();
+	std::thread thread([&](){karaoke->mainLoop();});
 
 	while (window->isWindowOpen())
 	{
 		window->clearBuffer();
-		std::chrono::duration<float> elapsed = std::chrono::high_resolution_clock::now() - start_time;
-		oke_obj->setLength(5 - elapsed.count());
-//		karaoke_manager.loop();
 		scene->draw();
+		karaoke->flagUp();
 		window->swapBuffer();
 		input->pollEvents();
+		usleep(100);
 	}
 
 	window->destroyWindow();

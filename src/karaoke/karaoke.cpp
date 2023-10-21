@@ -24,9 +24,9 @@ void Karaoke::readJson(const char *path_)
 		}
 		m_json_object = nlohmann::json::parse(file);
 
-		//get values from json object
+
 		m_offset = m_json_object["offset"].get<int>();
-		m_bpm = m_json_object["bpm"].get<int>();//TODO div by 60
+		m_bpm = m_json_object["bpm"].get<int>();
 
 		for (size_t i = 0; i < m_json_object["notes"].size(); i++)
 		{
@@ -57,29 +57,32 @@ void Karaoke::instantiate()
 {
 	float gen_pos = 0;
 	bool gen_frag = false;
-	for(const auto & mjr: m_notes)
+	for (const auto &mjr: m_notes)
 	{
 		m_note_objects.emplace_back();
-		for(const auto & note: mjr)
+		for (const auto &note: mjr)
 		{
 			std::cout << note.pitch << std::endl;
-			if(note.pitch != -1)
+			if (note.pitch != -1)
 			{
-				m_note_objects.back().emplace_back(new KaraokeLine(1/(float)note.note * m_length_mlt));
-				m_note_objects.back().back()->setColor({.6,.6,.6});
-				m_note_objects.back().back()->m_position = {gen_pos-3,(float)note.pitch * m_pitch_mlt,1};
+				m_note_objects.back().emplace_back(new KaraokeLine(1 / (float) note.note * m_length_mlt));
+				m_note_objects.back().back()->setColor({.6, .6, .6});
+				m_note_objects.back().back()->m_position = {gen_pos - 3, (float) note.pitch * m_pitch_mlt, 1};
 			}
-			gen_pos += 1/(float)note.note * m_length_mlt;
+			gen_pos += 1 / (float) note.note * m_length_mlt;
 
 		}
-		if(!gen_frag){
+		if (!gen_frag)
+		{
 			gen_frag = true;
 		}
-		else{
+		else
+		{
 			gen_frag = false;
 			gen_pos = 0;
 		}
 	}
+	std::cout << "instantiated\n";
 }
 
 void Karaoke::start()
@@ -95,7 +98,36 @@ void Karaoke::stop()
 
 void Karaoke::mainLoop()
 {
+	while (true)
+	{
+		waitNextFrame_();
+		update_();
 
+		//main loop
+		for (const auto &obs: m_note_objects)
+		{
+			for (const auto &e: obs)
+			{
+				e->setActive(false);
+			}
+		}
+
+		for (const auto &obs: m_note_objects)
+		{
+			for (const auto &e: obs)
+			{
+				e->setActive(true);
+			}
+		}
+
+//		usleep(100);//wait next flame
+	}
+
+}
+
+void Karaoke::flagUp()
+{
+	m_flag = true;
 }
 
 Karaoke::~Karaoke()
@@ -107,5 +139,14 @@ void Karaoke::update_()
 	m_delta_time = system_clock::now();
 
 	auto now = system_clock::now();
-	(int)floor((((double)duration_cast<milliseconds>(now-m_start_time).count()/1000.0) - (m_offset/1000.0)) / (60.0/m_bpm) / 4);
+	m_mjr = static_cast<int>(floor(
+			((static_cast<double>(duration_cast<milliseconds>(now - m_start_time).count()) / 1000.0) -
+			 (m_offset / 1000.0)) / (60.0 / m_bpm) / 4));
+}
+
+void Karaoke::waitNextFrame_()
+{
+	while (!m_flag)
+	{ usleep(250); }
+	m_flag = false;
 }
