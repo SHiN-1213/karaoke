@@ -52,7 +52,6 @@ void Karaoke::readJson(const char *path_)
 void Karaoke::instantiate()
 {
 	float gen_pos = 0;
-	bool gen_frag = false;
 	for (const auto &mjr: m_notes)
 	{
 		m_note_objects.emplace_back();
@@ -66,16 +65,6 @@ void Karaoke::instantiate()
 				m_note_objects.back().back()->m_position = {gen_pos - 3, (float) note.pitch * m_pitch_mlt, 1};
 			}
 			gen_pos += 1 / (float) note.note * m_length_mlt;
-
-		}
-		if (!gen_frag)
-		{
-			gen_frag = true;
-		}
-		else
-		{
-			gen_frag = false;
-			gen_pos = 0;
 		}
 	}
 	std::cout << "instantiated\n";
@@ -97,26 +86,19 @@ void Karaoke::mainLoop()
 	while (true)
 	{
 		waitNextFrame_();
-		update_();
+		auto milli_sec = duration_cast<milliseconds>(system_clock::now() - m_delta_time).count();
 
 		//main loop
 		for (const auto &obs: m_note_objects)
 		{
 			for (const auto &e: obs)
 			{
-				e->setActive(false);
+				e->m_position.x -= milli_sec * .001;
 			}
 		}
 
-		for (const auto &obs: m_note_objects)
-		{
-			for (const auto &e: obs)
-			{
-				e->setActive(true);
-			}
-		}
-
-//		usleep(100);//wait next flame
+		//set delta time and some
+		update_();
 	}
 
 }

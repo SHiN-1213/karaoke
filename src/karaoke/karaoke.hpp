@@ -46,7 +46,7 @@ private:
 	int m_bpm = 0;
 
 	static constexpr float m_pitch_mlt = 1.0f / 8.0f;
-	static constexpr float m_length_mlt = 3 / 1.0f;
+	static constexpr float m_length_mlt = 2 / 1.0f;
 
 	struct Notes
 	{
