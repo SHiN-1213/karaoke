@@ -15,7 +15,7 @@ class Karaoke
 public:
 	Karaoke() = default;
 
-	Karaoke(const char *path_);
+	explicit Karaoke(const char *path_);
 
 	void readJson(const char *path_);
 
@@ -42,11 +42,14 @@ private:
 private:
 	nlohmann::json m_json_object;
 	/* -- **/
+
+
 	int m_offset = 0;
 	int m_bpm = 0;
+	double m_beat_length = 0;
 
 	static constexpr float m_pitch_mlt = 1.0f / 8.0f;
-	static constexpr float m_length_mlt = 2 / 1.0f;
+	static constexpr float m_length_mlt = 4 / 1.0f;
 
 	struct Notes
 	{
@@ -59,6 +62,7 @@ private:
 
 	std::chrono::system_clock::time_point m_start_time;
 	std::chrono::system_clock::time_point m_delta_time;
+	std::chrono::system_clock::time_point m_delta_time_old;
 	int m_mjr = 0;
 	bool m_flag = false;
 };

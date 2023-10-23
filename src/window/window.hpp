@@ -10,7 +10,7 @@ class Window
 public:
 	static Window *getInstance();
 	[[nodiscard]] GLFWwindow *getWindow() const {return m_window;}
-	void createWindow(int width_, int height_, const char *title_);
+	void createWindow(int width_, int height_, const char *title_, bool full_screen_);
 	[[nodiscard]] bool isWindowOpen() const;
 	void clearBuffer() ;
 	void swapBuffer() const;

@@ -24,7 +24,7 @@ void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int 
 int main()
 {
 	Window *window = Window::getInstance();
-	window->createWindow(1600, 800, "Hello window");
+	window->createWindow(1920, 1080, "Hello window",true);
 
 	initGlew();
 
@@ -74,7 +74,7 @@ int main()
 		karaoke->flagUp();
 		window->swapBuffer();
 		input->pollEvents();
-		usleep(100);
+		usleep(200);
 	}
 
 	window->destroyWindow();

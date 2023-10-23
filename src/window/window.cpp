@@ -10,7 +10,7 @@ Window *Window::getInstance()
 	return m_instance;
 }
 
-void Window::createWindow(int width_, int height_, const char *title_)
+void Window::createWindow(int width_, int height_, const char *title_, bool full_screen_)
 {
 	if (glfwInit() == GL_FALSE) {
 		std::cerr << "Can't initialize GLFW" << std::endl;
@@ -20,7 +20,7 @@ void Window::createWindow(int width_, int height_, const char *title_)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	m_window = glfwCreateWindow(width_, height_, title_, nullptr, nullptr);
+	m_window = glfwCreateWindow(width_, height_, title_, full_screen_ ? glfwGetPrimaryMonitor () : nullptr , nullptr);
 	if (m_window == nullptr)
 	{
 		std::cerr << "failed to create window" << std::endl;
