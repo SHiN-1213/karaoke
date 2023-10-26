@@ -12,6 +12,7 @@ include_directories(C:/glew-mingw/include)
 link_directories(C:/glfw-3.3.8.bin.WIN64/glfw-3.3.8.bin.WIN64/lib-mingw-w64)
 link_directories(C:/glew-mingw/lib)
 link_directories(C:/glew-mingw/bin)
+link_directories(dlls)
 
 add_executable(opengl_learn src/main.cpp)
 
@@ -43,4 +44,6 @@ target_link_libraries(opengl_learn
         glfw3
         libglew32
         glu32
+        librtaudio
+        libfftw3f
 )

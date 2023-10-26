@@ -51,6 +51,8 @@ private:
 	static constexpr float m_pitch_mlt = 1.0f / 8.0f;
 	static constexpr float m_length_mlt = 4 / 1.0f;
 
+	static constexpr float m_one_f = 1.05946309436f;
+
 	struct Notes
 	{
 		int note;//ex) 1,2,4,8,16...
