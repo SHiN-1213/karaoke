@@ -10,7 +10,7 @@
 class FftManager
 {
 public:
-	FftManager(uint32_t input_buffer_size_,uint32_t sample_late_ ,uint32_t m_fft_buffer_size_);
+	FftManager(uint32_t input_buffer_size_, uint32_t sample_late_, uint32_t m_fft_buffer_size_);
 
 	void pushBackBuffer(float *buffer_);
 

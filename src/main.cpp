@@ -23,29 +23,23 @@
 
 void initGlew();
 
+void initGl();
+
 void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int mods_);
 
 int audioCallback(void *outputBuffer, void *inputBuffer, uint32_t nBufferFrames, double streamTime,
                   RtAudioStreamStatus status, void *userData);
 
-auto *fft_manager = new FftManager(128, 44100, 4096);
+auto *fft_manager = new FftManager(128, 44100, 4096 * 2);
+AudioFile<float> audio_file;
 
 int main()
 {
 	Window *window = Window::getInstance();
-	window->createWindow(1800, 1000, "Hello window",false);
+	window->createWindow(1800, 1000, "Hello window", false);
 
 	initGlew();
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	float borderColor[] = {1.0f, 1.0f, 0.0f, 1.0f};
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	initGl();
 
 	auto *input = new Input(window->getWindow());
 	input->enableRawInput();
@@ -61,7 +55,7 @@ int main()
 
 	scene->addObject(plane);
 
-	auto* karaoke = new Karaoke("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
+	auto *karaoke = new Karaoke("C:/Users/Kamih/source/repos/opengl_learn/jsons/test.json");
 	karaoke->instantiate();
 
 	for (const auto &mjr: karaoke->getObjects())
@@ -74,28 +68,35 @@ int main()
 	}
 
 	karaoke->start();
-	std::thread thread([&](){karaoke->mainLoop();});
+	std::thread thread([&]()
+	                   { karaoke->mainLoop(); });
 
 	auto *audio_manager = new AudioManager(44100, 128);
 
-	StreamParameters out_stream;
-	out_stream.deviceId = 132;
-	out_stream.nChannels = 2;
-	StreamParameters in_stream;
-	in_stream.deviceId = 135;
-	in_stream.nChannels = 1;
-
-	audio_manager->openStream(out_stream, in_stream, audioCallback);
-	audio_manager->startStream();
-
-	AudioFile<float> audio_file;
-	audio_file.load("C:/Users/Kamih/source/repos/opengl_learn/audio_files/Peak_test_A.wav");
-
-	for(const auto &e: audio_manager->getDeviceList())
+	for (const auto &e: audio_manager->getDeviceList())
 	{
 		std::cout << e << std::endl;
 	}
 
+	uint32_t i_id, o_id;
+	std::cout << "output?\n";
+	std::cin >> o_id;
+	std::cout << "input?\n";
+	std::cin >> i_id;
+
+	StreamParameters out_stream;
+	out_stream.deviceId = o_id;
+	out_stream.nChannels = 2;
+	StreamParameters in_stream;
+	in_stream.deviceId = i_id;
+	in_stream.nChannels = 1;
+
+	size_t buff_num = 0;
+	audio_manager->openStream(&out_stream, &in_stream, audioCallback, &buff_num);
+	audio_manager->startStream();
+
+
+	audio_file.load("C:/Users/Kamih/source/repos/opengl_learn/audio_files/Peak_test_A.wav");
 
 
 	while (window->isWindowOpen())
@@ -124,6 +125,19 @@ void initGlew()
 	}
 }
 
+void initGl()
+{
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	float borderColor[] = {1.0f, 1.0f, 0.0f, 1.0f};
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int mods_)
 {
 	if (key_ == GLFW_KEY_E && action_ == GLFW_PRESS)
@@ -136,7 +150,22 @@ void keyCallback(GLFWwindow *window_, int key_, int scancode_, int action_, int 
 int audioCallback(void *outputBuffer, void *inputBuffer, uint32_t nBufferFrames, double streamTime,
                   RtAudioStreamStatus status, void *userData)
 {
-	fft_manager->pushBackBuffer((float *)inputBuffer);
+	fft_manager->pushBackBuffer((float *) inputBuffer);
 	fft_manager->getFrequency();
+
+	auto *data = (size_t *) userData;
+	auto *buffer = (float *) outputBuffer;
+
+
+	for (size_t i = 0; i < nBufferFrames; i++)
+	{
+		for (size_t j = 0; j < 2; j++)
+		{
+			*buffer++ = audio_file.samples[j][i + (*data)];
+		}
+	}
+
+	*(size_t *) userData += nBufferFrames;
+
 	return 0;
 }
