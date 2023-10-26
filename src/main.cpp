@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "../libs/AudioFile.h"
+
 #include "window/window.hpp"
 #include "input/input.hpp"
 #include "shader/shader.hpp"
@@ -85,6 +87,9 @@ int main()
 
 	audio_manager->openStream(out_stream, in_stream, audioCallback);
 	audio_manager->startStream();
+
+	AudioFile<float> audio_file;
+	audio_file.load("C:/Users/Kamih/source/repos/opengl_learn/audio_files/Peak_test_A.wav");
 
 	for(const auto &e: audio_manager->getDeviceList())
 	{
